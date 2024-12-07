@@ -7,6 +7,8 @@ plugins {
 }
 
 android {
+    // Jedidi Add
+    viewBinding { enable = true }
     namespace = "tn.isims.fantasy"
     compileSdk = 34
 
@@ -33,6 +35,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+
 }
 
 dependencies {
@@ -44,6 +48,7 @@ dependencies {
     // Jedidi TODO: Add the dependencies for Firebase products you want to use
     // Example: Firebase Authentication
     implementation("com.google.firebase:firebase-auth")
+    implementation ("com.google.android.gms:play-services-auth")
     // Example: Firebase Cloud Firestore
     implementation("com.google.firebase:firebase-firestore")
     // Jedidi When using the BoM, don't specify versions in Firebase dependencies

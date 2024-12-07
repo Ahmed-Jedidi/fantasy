@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GoogleSignInButton">
+        <item name="cornerRadius">20dp</item>
+        <item name="android:background">@drawable/google_signin_button_bg</item>
+    </style>
+</resources>

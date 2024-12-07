@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">fantasy</string>
+    <string name="action_logout">Logout</string>
+    <string name="or_login_with">Or Login with</string>
+    <string name="click_here_to_sign_up">Didn\'t created account? Click here to sign up</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="google">Google</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="click_here_to_login">Already signed up? Click here to login.</string>
+    <string name="or_sign_up_with">Or sign up with</string>
+    <string name="main_greeting">Logout</string>
 </resources>
