@@ -11,4 +11,16 @@
     <string name="click_here_to_login">Already signed up? Click here to login.</string>
     <string name="or_sign_up_with">Or sign up with</string>
     <string name="main_greeting">Logout</string>
+    <string name="bar_homepage">Homepage</string>
+    <string name="error_empty_email">\"Email is required\"</string>
+    <string name="error_empty_password">\"Password is required\"</string>
+    <string name="login_success">\"Login Successful\"</string>
+    <string name="login_failed">\"Login failed\"</string>
+    <string name="google_sign_in_success">Login with Google successful</string>
+    <string name="google_sign_in_failed">Login with Google failed</string>
+    <string name="google_login_failed">\"Google Sign-In failed: \"</string>
+    <string name="error_short_password">Password is too short</string>
+    <string name="sign_up_success">Sign up successfully</string>
+    <string name="sign_up_failed">Sign up failed. Please try again.</string>
+    <string name="sign_up_enter_mail_password">Please enter email and password properly.</string>
 </resources>

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set the title of the ActionBar
         assert actionBar != null;
-        actionBar.setTitle("Homepage");
+        actionBar.setTitle(R.string.bar_homepage);
     }
 
 
@@ -67,16 +67,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Jedidi required more adjustements
-        if (item.getItemId() == android.R.id.home) {
+        /*if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
-        }
+        }*/
         if (item.getItemId() == R.id.action_logout) {
-            auth.signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
+            performLogout();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void performLogout() {
+        auth.signOut();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }
