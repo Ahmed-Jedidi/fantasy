@@ -3,6 +3,7 @@ package tn.isims.fantasy;
 import static com.google.android.gms.auth.api.signin.GoogleSignIn.getClient;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginButton.setOnClickListener(view -> loginWithEmailPassword());
         binding.btnGoogle.setOnClickListener(v -> loginWithGoogle());
         // Go to login activity
+        //binding.signUpTextview.setPaintFlags(binding.signUpTextview.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         binding.signUpTextview.setOnClickListener(view -> navigateToSignUp());
         // User is already signed in, start the Main Activity
         if (auth.getCurrentUser() != null) { navigateToMainActivity(); }

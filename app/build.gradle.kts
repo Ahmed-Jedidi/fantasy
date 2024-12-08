@@ -69,4 +69,21 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Jedidi add Scale able dependency
+    //implementation("com.intuit.sdp:sdp-android:1.1.0")
+    //implementation("com.intuit.ssp:ssp-android:1.1.0")
+
+     // Jedidi add Rounded image view
+     //implementation("com.makeramen:roundedimageview:2.3.0")
+
+     // Jedidi add navigation ui, fragment
+     //implementation("androidx.navigation:navigation-fragment:navigationFragment")
+     //implementation("androidx.navigation:navigation-ui:navigationUi")
+
+     // Jedidi add image carousel
+     //implementation("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:whynotimagecarousel")
+
+     // Jedidi add glide
+     //implementation("com.github.bumptech.glide:glide:glide")
 }
