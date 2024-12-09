@@ -7,11 +7,16 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,10 +30,14 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import tn.isims.fantasy.databinding.ActivityLoginBinding;
 
@@ -46,7 +55,15 @@ public class LoginActivity extends AppCompatActivity {
                 } // else {Log.w("LoginActivity", "Google sign-in failed.");}
             });
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            navigateToMainActivity();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +91,13 @@ public class LoginActivity extends AppCompatActivity {
 
         initGoogleSignIn();
 
+        // Forget Password
+        binding.forgotPasswordText.setPaintFlags(binding.forgotPasswordText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         // Setup click listener for the login button
         binding.loginButton.setOnClickListener(view -> loginWithEmailPassword());
         binding.btnGoogle.setOnClickListener(v -> loginWithGoogle());
+
         // Go to login activity
         //binding.signUpTextview.setPaintFlags(binding.signUpTextview.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         binding.signUpTextview.setOnClickListener(view -> navigateToSignUp());
@@ -100,22 +121,96 @@ public class LoginActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(email)) {
             binding.emailEditText.setError(getString(R.string.error_empty_email));
+            showToast(getString(R.string.error_empty_email));
         }
-        if (TextUtils.isEmpty(password)) {
+        else if (!Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.getText().toString()).matches()) {
+            binding.emailEditText.setError(getString(R.string.error_invalid_email));
+            showToast(getString(R.string.error_invalid_email));
+        }
+        else if (TextUtils.isEmpty(password)) {
             binding.passwordEditText.setError(getString(R.string.error_empty_password));
-        } else {
+            showToast(getString(R.string.error_empty_password));
+        }
+        else if (password.length() < 6) {
+            binding.passwordEditText.setError(getString(R.string.error_short_password));
+            showToast(getString(R.string.error_short_password));
+        }
+        else {
+            isLoading(true);
             auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            hideTheKeyboard();
+
+                            isLoading(false);
+                            // Firebase Authentication
                             FirebaseUser user = auth.getCurrentUser();
-                            // Sign in success, update UI with the signed-in user's information
-                            navigateToMainActivity();
-                            Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
+                            assert user != null;
+                            if (user.isEmailVerified()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                navigateToMainActivity();
+                                Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
+                            } else {
+                                auth.signOut();
+                                AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this)
+                                        .setMessage("Please verify your email address to access all features, Press continue to get verification link.")
+                                        .setTitle("Verify your Email Address")
+                                        .setPositiveButton("Continue", (dialog1, which) -> {
+                                            user.sendEmailVerification();
+                                            showToast("Verification link send to email address, please verify");
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.red));
+                            }
+
                         } else {
-                            Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                            hideTheKeyboard();
+                            try {
+                                throw Objects.requireNonNull(task.getException());
+                            } catch (FirebaseAuthInvalidUserException e) {
+                                isLoading(false);
+                                showToast("User doesn't exits or is longer valid, try to register again");
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                isLoading(false);
+                                showToast("Invalid Credentials");
+                            } catch (Exception e) {
+                                isLoading(false);
+                                showToast(e.getMessage());
+                            }
+                            //Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
         }
+    }
+
+    private void hideTheKeyboard() {
+        //Ensures the keyboard doesn’t block the screen or interfere
+        View view = this.getCurrentFocus();
+        InputMethodManager manager = (InputMethodManager) getSystemService(LoginActivity.INPUT_METHOD_SERVICE);
+        assert view != null;
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void isLoading(boolean isLoading) {
+        // Reference the ProgressBar
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+
+        if (isLoading) {
+            binding.loginButton.setVisibility(View.INVISIBLE);
+            //binding.progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            binding.loginButton.setVisibility(View.VISIBLE);
+            //binding.progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void initGoogleSignIn() {

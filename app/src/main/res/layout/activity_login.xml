@@ -76,18 +76,42 @@ tools:context=".LoginActivity">
             android:padding="10dp"
             android:textColor="@color/black"
             android:textColorHint="#9E9E9E" />
-        <!--<TextView
+        <TextView
             android:id="@+id/forgot_password_text"
             style="@style/linkText"
+            android:textColor="#BDBDBD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/ripple"
-            android:clickable="true"
-            android:text="@string/forgot_password" />-->
 
-        <Button
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/forgot_password" />
+        <!-- android:background="@drawable/ripple" -->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_button"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <!--<Button
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +121,7 @@ tools:context=".LoginActivity">
             android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            app:cornerRadius="30dp" />
+            app:cornerRadius="30dp" />-->
 
         <TextView
             android:id="@+id/sign_up_textview"

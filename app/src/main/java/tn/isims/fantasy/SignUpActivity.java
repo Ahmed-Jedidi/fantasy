@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,9 +29,19 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 import tn.isims.fantasy.databinding.ActivitySignUpBinding;
+import tn.isims.fantasy.utilities.Constants;
+import tn.isims.fantasy.utilities.ReadWriteUser;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -97,33 +111,86 @@ public class SignUpActivity extends AppCompatActivity {
     private void SignUpWithEmailPassword() {
         {
             // Get email and password from edit texts
+            String username = binding.inputUsername.getText().toString();
             String email = binding.emailEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
 
+            if (TextUtils.isEmpty(username)) {
+                binding.inputUsername.setError(getString(R.string.error_empty_username));
+                showToast(getString(R.string.error_empty_username));
+            }
             // Check if email and password are not empty
-            if (TextUtils.isEmpty(email)) {
+            else if (TextUtils.isEmpty(email)) {
                 binding.emailEditText.setError(getString(R.string.error_empty_email));
-                return;
+                showToast(getString(R.string.error_empty_email));
             }
-            if (TextUtils.isEmpty(password)) {
+            else if (!Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.getText().toString()).matches()) {
+                binding.emailEditText.setError(getString(R.string.error_invalid_email));
+                showToast(getString(R.string.error_invalid_email));
+            }
+            else if (TextUtils.isEmpty(password)) {
                 binding.passwordEditText.setError(getString(R.string.error_empty_password));
-                return;
+                showToast(getString(R.string.error_empty_password));
             }
-            if (password.length() < 6) {
+            else if (password.length() < 6) {
                 binding.passwordEditText.setError(getString(R.string.error_short_password));
-                return;
+                showToast(getString(R.string.error_short_password));
             }
-            if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && password.length() >= 6) {
+            else if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && password.length() >= 6
+                    && Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.getText().toString()).matches()) {
+                isLoading(true);
                 // Create a new user with email and password
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(SignUpActivity.this, R.string.sign_up_success, Toast.LENGTH_SHORT).show();
-                                // Sign up successful, go to main activity
-                                navigateToMain();
+                                hideTheKeyboard();
+                                ///////////////////////////////////////////////
+                                FirebaseUser firebaseUser = auth.getCurrentUser();
+
+                                //Store userdata to firebase realtime database
+                                ReadWriteUser writeUserDetails = new ReadWriteUser(binding.inputUsername.getText().toString());
+
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Constants.USER_COLLECTION);
+                                assert firebaseUser != null;
+                                databaseReference.child(firebaseUser.getUid()).setValue(writeUserDetails)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()){
+                                                isLoading(false);
+                                                // showToast("Profile created successfully, please verify your email");
+
+                                                // Send verification link
+                                                firebaseUser.sendEmailVerification();
+                                                showToast("Verification link send to your entered email address");
+                                                isLoading(false);
+                                                Toast.makeText(SignUpActivity.this, R.string.sign_up_success, Toast.LENGTH_SHORT).show();
+                                                // Sign up successful, go to main activity
+                                                navigateToMain();
+
+                                            }else{
+                                                isLoading(false);
+                                                showToast("Something error occurred, please try again later");
+                                            }
+                                        });
+                                ///////////////////////////////////////////////
+
+
                             } else {
+                                try {
+                                    throw Objects.requireNonNull(task.getException());
+                                }catch (FirebaseAuthUserCollisionException e){
+                                    isLoading(false);
+                                    showToast("Email is already in use, try again or re-enter");
+                                } catch (FirebaseAuthWeakPasswordException e){
+                                    isLoading(false);
+                                    showToast("Password is too weak, try mixing of alphabets");
+                                }catch (FirebaseAuthInvalidCredentialsException e){
+                                    showToast("Email is invalid or already in use");
+                                    isLoading(false);
+                                } catch (Exception e){
+                                    showToast(e.getMessage());
+                                }
                                 // Sign up failed, display error message
-                                Toast.makeText(SignUpActivity.this, R.string.sign_up_failed, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(SignUpActivity.this, R.string.sign_up_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
             } else {
@@ -134,7 +201,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void navigateToMain() {
-        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+        //Open main activity after successful register
+        Intent iMainActivity = new Intent(SignUpActivity.this, MainActivity.class);
+        iMainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(iMainActivity);
+        //startActivity(new Intent(SignUpActivity.this, MainActivity.class));
         finish();
     }
 
@@ -195,5 +266,34 @@ public class SignUpActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+
+    private void hideTheKeyboard() {
+        //Ensures the keyboard doesn’t block the screen or interfere
+        View view = this.getCurrentFocus();
+        InputMethodManager manager = (InputMethodManager) getSystemService(LoginActivity.INPUT_METHOD_SERVICE);
+        assert view != null;
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void isLoading(boolean isLoading) {
+        // Reference the ProgressBar
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+
+        if (isLoading) {
+            binding.signUpButton.setVisibility(View.INVISIBLE);
+            //binding.progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            binding.signUpButton.setVisibility(View.VISIBLE);
+            //binding.progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

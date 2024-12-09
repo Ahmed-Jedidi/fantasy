@@ -71,8 +71,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // Jedidi add Scale able dependency
-    //implementation("com.intuit.sdp:sdp-android:1.1.0")
-    //implementation("com.intuit.ssp:ssp-android:1.1.0")
+    implementation("com.intuit.sdp:sdp-android:1.1.0")
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
 
      // Jedidi add Rounded image view
      //implementation("com.makeramen:roundedimageview:2.3.0")

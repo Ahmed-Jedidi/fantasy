@@ -51,12 +51,25 @@ tools:context=".SignUpActivity">
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/email_edit_text"
+            android:id="@+id/input_username"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/rounded_shape"
             android:drawableStart="@drawable/baseline_person_24"
+            android:hint="@string/username"
+            android:inputType="textCapWords"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="#9E9E9E" />
+
+        <EditText
+            android:id="@+id/email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_shape"
+            android:drawableStart="@drawable/ic_email"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:padding="10dp"
@@ -76,7 +89,7 @@ tools:context=".SignUpActivity">
             android:textColor="@color/black"
             android:textColorHint="#9E9E9E" />
 
-        <Button
+        <!--<Button
             android:id="@+id/sign_up_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,8 +99,28 @@ tools:context=".SignUpActivity">
             android:text="@string/sign_up"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            app:cornerRadius="30dp" />
+            app:cornerRadius="30dp" />-->
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sign_up_button"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+        </FrameLayout>
         <TextView
             android:id="@+id/already_signed_up_textview"
             android:layout_width="wrap_content"
