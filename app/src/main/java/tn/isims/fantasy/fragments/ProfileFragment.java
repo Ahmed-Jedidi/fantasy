@@ -18,8 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+import tn.isims.fantasy.BmiActivity;
 import tn.isims.fantasy.EditProfileActivity;
 import tn.isims.fantasy.LoginActivity;
+import tn.isims.fantasy.NotifyActivity;
 import tn.isims.fantasy.R;
 import tn.isims.fantasy.databinding.FragmentProfileBinding;
 
@@ -74,6 +76,9 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FragmentProfileBinding binding;
 
+    private static final String CHANNEL_ID = "my_channel_id"; // Notification channel ID
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +86,8 @@ public class ProfileFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_profile, container, false);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         editProfile();
+        Notify();
+        trackBmi();
         logout();
 
 /////////////////////////////////////////////// Firestore username
@@ -107,6 +114,8 @@ public class ProfileFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+
     private void getName(String name) {
         // Set up the Firebase authentication instance
         auth = FirebaseAuth.getInstance();
@@ -130,6 +139,14 @@ public class ProfileFragment extends Fragment {
 
     private void editProfile() {
         binding.editProfile.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfileActivity.class)));
+    }
+
+    private void Notify() {
+
+    }
+
+    private void trackBmi() {
+        binding.notificationSwitch.setOnClickListener(v -> startActivity(new Intent(getContext(), NotifyActivity.class)));
     }
 
     private void logout() {

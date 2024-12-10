@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".BmiActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/ripple_dark"
+            android:clickable="true"
+            android:padding="@dimen/_7sdp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/text"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:padding="@dimen/_7sdp"
+            style="@style/headingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_BMI"
+            android:textSize="@dimen/_16ssp" />
+
+
+
+
+    </RelativeLayout>
+
+<TextView
+    android:id="@+id/enterthefollowing"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingTop="20dp"
+    android:text="Enter the following:"
+    android:textColor="#291505"
+    android:textSize="20sp" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="193dp"
+    android:orientation="vertical"
+    android:paddingLeft="80dp"
+    android:paddingTop="20dp"
+    android:paddingRight="80dp">
+
+    <EditText
+        android:id="@+id/heightEditTextNumberSigned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Height"
+        android:inputType="numberSigned"
+        android:textColor="#291505"
+        android:textSize="34sp" />
+
+    <EditText
+        android:id="@+id/weightEditTextNumberSigned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Weight"
+        android:inputType="numberSigned"
+        android:paddingTop="30dp"
+        android:textColor="#291505"
+        android:textSize="34sp" />
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="297dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingTop="50dp"
+        android:text="Result:"
+        android:textColor="#291505"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/displayTextView"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:gravity="center"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:text="0.00"
+        android:textColor="@color/purple_500"
+        android:textColorLink="#A8A4A8"
+        android:textSize="80sp" />
+
+    <TextView
+        android:id="@+id/categoryTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="CATEGORY"
+        android:textColor="@color/purple_700"
+        android:textSize="34sp" />
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingLeft="70dp"
+    android:paddingTop="50dp"
+    android:paddingRight="70dp">
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/purple_700"
+        android:onClick="checkCalculate"
+        android:text="CALCULATE"
+        android:textColorLink="@color/primary" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="127dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/primary"
+        android:text="RESET"
+        android:textColorLink="#F9F9F9" />
+</LinearLayout>
+
+</LinearLayout>

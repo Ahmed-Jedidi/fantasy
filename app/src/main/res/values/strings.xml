@@ -73,5 +73,8 @@
     <string name="error_empty_username">Username is required</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="track_bmi">Track BMI</string>
+    <string name="edit_BMI">Check your BMI</string>
+    <string name="reclamation">Reclamation</string>
 
 </resources>

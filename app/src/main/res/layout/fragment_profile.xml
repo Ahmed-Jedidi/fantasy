@@ -183,6 +183,7 @@ tools:context=".fragments.ProfileFragment">
                     tools:ignore="RelativeOverlap" />
 
                 <Switch
+                    android:id="@+id/notification_switch"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -213,6 +214,7 @@ tools:context=".fragments.ProfileFragment">
             android:background="@drawable/input_background">
 
             <RelativeLayout
+                android:id="@+id/track_BMI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -234,7 +236,7 @@ tools:context=".fragments.ProfileFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/descText"
-                    android:text="@string/track_order"
+                    android:text="@string/track_bmi"
                     android:layout_marginStart="@dimen/_7sdp"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/track_icon"
@@ -314,7 +316,7 @@ tools:context=".fragments.ProfileFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/descText"
-                    android:text="@string/project_repository"
+                    android:text="@string/reclamation"
                     android:layout_marginStart="@dimen/_7sdp"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/project_icon"
