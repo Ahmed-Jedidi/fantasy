@@ -36,7 +36,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import tn.isims.fantasy.databinding.ActivitySignUpBinding;
@@ -144,7 +147,7 @@ public class SignUpActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 hideTheKeyboard();
-                                ///////////////////////////////////////////////
+                                /////////////////////////////////////////////// Realtime DB
                                 FirebaseUser firebaseUser = auth.getCurrentUser();
 
                                 //Store userdata to firebase realtime database
@@ -171,7 +174,30 @@ public class SignUpActivity extends AppCompatActivity {
                                                 showToast("Something error occurred, please try again later");
                                             }
                                         });
-                                ///////////////////////////////////////////////
+                                /////////////////////////////////////////////// Firestore
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                                // Create a collection and add a document
+                                Map<String, Object> user = new HashMap<>();
+                                user.put("uid", firebaseUser.getUid().trim());
+                                user.put("username", binding.inputUsername.getText().toString().trim());
+                                user.put("email", binding.emailEditText.getText().toString().trim());
+                                user.put("password", binding.passwordEditText.getText().toString());
+                                user.put("role", "user");
+
+
+                                //db.collection("users").add(user)
+                                db.collection("users").document(firebaseUser.getUid().trim()).set(user)
+                                        .addOnSuccessListener(documentReference -> {
+                                            //Log.d("Firestore", "Document added with ID: " + documentReference.getId());
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            //Log.e("Firestore", "Error adding document", e);
+                                        });
+
+
+                                //////////////////////////////////////////////
 
 
                             } else {

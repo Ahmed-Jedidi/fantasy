@@ -35,6 +35,11 @@
         <item name="android:indeterminateTint">@color/primary</item>
     </style>
 
+    <style name="textAppearance" parent="TextAppearance.AppCompat.Caption">
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:textSize">0sp</item>
+    </style>
+
     <style name="headingText" parent="Widget.AppCompat.TextView">
         <item name="android:fontFamily">@font/extra_bold</item>
         <item name="android:textSize">@dimen/_29ssp</item>
