@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class StayInTouchActivity extends AppCompatActivity {
 
-
     // Declare EditText fields for user input (name and email)
     EditText sitnameedit, sitemailedit;
     //Declare Button for the subscription action
