@@ -8,7 +8,40 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
 android:padding="16dp"
-tools:context=".NotifyActivity">
+tools:context=".notification.NotifyActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/ripple_dark"
+            android:clickable="true"
+            android:padding="@dimen/_7sdp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/text"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/headingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_notification"
+            android:textSize="@dimen/_16ssp" />
+
+
+
+
+
+    </RelativeLayout>
 
 
 <TextView

@@ -20,10 +20,14 @@ import java.util.Objects;
 
 import tn.isims.fantasy.BmiActivity;
 import tn.isims.fantasy.EditProfileActivity;
+import tn.isims.fantasy.LocationActivity;
 import tn.isims.fantasy.LoginActivity;
-import tn.isims.fantasy.NotifyActivity;
+import tn.isims.fantasy.notification.NotifyActivity;
 import tn.isims.fantasy.R;
 import tn.isims.fantasy.databinding.FragmentProfileBinding;
+
+import android.net.Uri;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,8 +90,10 @@ public class ProfileFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_profile, container, false);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         editProfile();
-        Notify();
+        notifyMe();
         trackBmi();
+        emergency();
+        reclamation();
         logout();
 
 /////////////////////////////////////////////// Firestore username
@@ -141,12 +147,46 @@ public class ProfileFragment extends Fragment {
         binding.editProfile.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfileActivity.class)));
     }
 
-    private void Notify() {
-
+    private void notifyMe() {
+        binding.notificationSwitch.setOnClickListener(v -> startActivity(new Intent(getContext(), NotifyActivity.class)));
+    }
+    private void trackBmi() {
+        binding.trackBMI.setOnClickListener(v -> startActivity(new Intent(getContext(), BmiActivity.class)));
     }
 
-    private void trackBmi() {
-        binding.notificationSwitch.setOnClickListener(v -> startActivity(new Intent(getContext(), NotifyActivity.class)));
+    public Intent sendReclamationEmail(String userEmail, String userMessage) {
+        // Define the recipient email address
+        String recipient = "support@company.com"; // Replace with the actual recipient email
+
+        // Define the subject of the email
+        String subject = "Reclamation Request";
+
+        // Compose the email body
+        String emailBody = "User Email: " + userEmail + "\n\nMessage:\n" + userMessage;
+
+        // Create an intent to send an email
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:")); // Only email apps should handle this
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
+
+        // Check if there's an email client available to handle the intent
+        //if (emailIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        //} else {
+            // Notify the user that no email client is available
+            //Toast.makeText(this, "No email client found!", Toast.LENGTH_SHORT).show();
+        //}
+        return emailIntent;
+    }
+
+
+    private void reclamation() {
+        binding.reclamation.setOnClickListener(v -> startActivity( sendReclamationEmail("ahmedjedidi16@gmail.com", "Reclamation")));
+    }
+    private void emergency() {
+        binding.emergency.setOnClickListener(v -> startActivity(new Intent(getContext(), LocationActivity.class)));
     }
 
     private void logout() {

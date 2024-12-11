@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.constraintlayout)
     // Jedidi add androidx.navigation.fragment.NavHostFragment
     implementation(libs.navigation.fragment)
+    implementation(libs.volley)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

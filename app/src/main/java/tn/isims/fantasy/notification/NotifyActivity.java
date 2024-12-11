@@ -1,6 +1,7 @@
-package tn.isims.fantasy;
+package tn.isims.fantasy.notification;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,11 +19,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import tn.isims.fantasy.R;
+import tn.isims.fantasy.databinding.ActivityEditProfileBinding;
+import tn.isims.fantasy.databinding.ActivityNotifyBinding;
+
 public class NotifyActivity extends AppCompatActivity {
 
     private static final String CHANNEL_ID = "my_channel_id"; // Notification channel ID
     Button notify; // Button for notifications
     EditText e; // EditText for input
+
+    private ActivityNotifyBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,12 @@ public class NotifyActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
+        binding = ActivityNotifyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.backIcon.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
 
         // Initialize UI components
@@ -70,7 +83,7 @@ public class NotifyActivity extends AppCompatActivity {
             );
 
             // Build the notification
-            Notification notification = new Notification.Builder(NotifyActivity.this, CHANNEL_ID)
+            @SuppressLint("NewApi") Notification notification = new Notification.Builder(NotifyActivity.this, CHANNEL_ID)
                     .setContentTitle("New Message")
                     .setContentText(e.getText().toString()) // Get text from EditText
                     .setSmallIcon(R.mipmap.ic_launcher) // Set small icon for notification
@@ -82,5 +95,6 @@ public class NotifyActivity extends AppCompatActivity {
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.notify(0, notification); // Notify with ID 0
         });
+
     }
 }

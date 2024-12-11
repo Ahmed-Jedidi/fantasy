@@ -1,4 +1,4 @@
-package tn.isims.fantasy;
+package tn.isims.fantasy.notification;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import tn.isims.fantasy.R;
 
 public class Notify2 extends AppCompatActivity {
 

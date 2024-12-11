@@ -76,5 +76,7 @@
     <string name="track_bmi">Track BMI</string>
     <string name="edit_BMI">Check your BMI</string>
     <string name="reclamation">Reclamation</string>
+    <string name="edit_notification">Notification</string>
+    <string name="emergency">Emergency SMS</string>
 
 </resources>
